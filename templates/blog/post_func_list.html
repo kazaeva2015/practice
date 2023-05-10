@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block context %}
+    {% for post in page_obj %}
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-4">
+                    <img scr="{{ post.thumbnails.url }}" class="card-img-top" alt={{ post.title }} />
+                </div>
+                <div class="col-8">
+                    <div class="card-body">
+                        <h5 class="catd-title">{{ post.title }}</h5>
+                        <div class="card-subtitle">{{ post.author.username }}</div>
+                        <p class="card-text">{{ post.city }}</p>
+                        <a href="{% url 'posts_by_subject' post.subject.slug %}" class="btn btn-primary">{{ post.subject.subject_name }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
