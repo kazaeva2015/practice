@@ -1,0 +1,36 @@
+version: '3.8'
+
+volumes:
+  pgdata:
+  static:
+  media:
+
+services:
+
+  django:
+    build:
+      context: .
+    ports:
+      - '8000:8000'
+    container_name: django
+    env_file:
+      - docker/env/.env.dev
+    volumes:
+      - ./:/app
+      - static:/app/static
+      - media:/app/media
+    depends_on:
+      - postgres
+    command: sh -c "python manage.py collectstatic --no-input &&
+                    python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    container_name: postgres
+    restart: always
+    env_file:
+      - docker/env/.env.dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
